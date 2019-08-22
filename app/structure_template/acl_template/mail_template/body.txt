@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+
+<body>
+	<div style="margin-bottom:20px">
+		Cuerpo del mensaje
+	</div>
+	
+	<div>
+		<img src="@image@" height="200px" width="200px">
+		<div></div>
+		<span style="width:100%; display:block; font-size:16px; color: rgb(31,78,121)">Auditoría Continua</span>	
+		<div></div>
+		<span style="width:100%; display:block; font-size:16px; color: rgb(0,32,96)">Resultados de Calidad en el Tiempo Adecuado</span>	
+		<div></div>
+		<span style="width:100%; display:block; font-size:16px; color: rgb(31,78,121)">Oficina: 809-960-2235</span>	
+	</div>
+</body>
+</html>

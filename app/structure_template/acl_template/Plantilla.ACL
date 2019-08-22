@@ -1,0 +1,382 @@
+@ACL1000
+^LOGFILE  @project_name@                           "" "@project_name@.LOG"
+[PARENT_FOLDER_ID] 0
+^FOLDER   SCRIPTS                             1412276302
+[PARENT_FOLDER_ID] 0
+^FOLDER   A_MAIN                              1412276314
+[PARENT_FOLDER_ID] 1412276302
+^FOLDER   B_TOOLS                             1412276353
+[PARENT_FOLDER_ID] 1412276302
+^FOLDER   TABLAS                              1412276373
+[PARENT_FOLDER_ID] 0
+^FOLDER   INTERMEDIAS                         1412276407
+[PARENT_FOLDER_ID] 1412276373
+^FOLDER   ORIGINAL                            1412276417
+[PARENT_FOLDER_ID] 1412276373
+^FOLDER   RESULTADOS                          1412276424
+[PARENT_FOLDER_ID] 1412276373
+^BATCH    A1_Main                            
+[PARENT_FOLDER_ID] 1412276314
+Comment
+*********************************************************************************************************
+**                                                                                                   
+**  Nombre del Script : A1_Main                                               
+**                                                                                                   
+**                                                                                                   
+**   Objetivo: 
+**
+**   Tabla Necesarias: N/A
+**
+**
+**   Output :  N/A
+**
+**
+**   Escrito Por: @name@, BRRD, Fecha:@date@
+**
+**
+**   Modificado Por: 
+**
+**********************************************************************************************************
+
+DO SCRIPT A2_Import_Data
+
+DO SCRIPT C1_Procedimientos
+
+DO SCRIPT B4_Salida_Resultados
+
+DO SCRIPT C2_Borrar_Tablas_Intermedias
+
+^BATCH    A2_Import_Data                     
+[PARENT_FOLDER_ID] 1412276314
+Comment
+*********************************************************************************************************
+**                                                                                                   
+**  Nombre del Script : A2_Import_Data                                               
+**                                                                                                   
+**                                                                                                   
+**   Objetivo: 
+**
+**   Tabla Necesarias: N/A
+**
+**
+**   Output :  N/A
+**
+**
+**   Escrito Por: @name@, BRRD, Fecha:@date@
+**
+**
+**   Modificado Por: 
+**
+**********************************************************************************************************
+
+SET SAFETY OFF
+
+SET FOLDER TO /TABLAS/ORIGINAL
+
+@importation@
+
+
+^BATCH    A3_Computed_Fields                 
+[PARENT_FOLDER_ID] 1412276314
+Comment
+*********************************************************************************************************
+**                                                                                                   
+**  Nombre del Script : A3_Computed_Fields                                               
+**                                                                                                   
+**                                                                                                   
+**   Objetivo: 
+**
+**   Tabla Necesarias: N/A
+**
+**
+**   Output :  N/A
+**
+**
+**   Escrito Por: @name@, BRRD, Fecha:@date@
+**
+**
+**   Modificado Por: 
+**
+**********************************************************************************************************
+
+SET SAFETY OFF
+
+@computed_fields@
+
+^BATCH    A6_Dynamic_Tables                  
+[PARENT_FOLDER_ID] 1412276314
+Comment
+*********************************************************************************************************
+**                                                                                                   
+**  Nombre del Script : A6_Dynamic_Tables                                               
+**                                                                                                   
+**                                                                                                   
+**   Objetivo: 
+**
+**   Tabla Necesarias: N/A
+**
+**
+**   Output :  N/A
+**
+**
+**   Escrito Por: @name@, BRRD, Fecha:@date@
+**
+**
+**   Modificado Por: 
+**
+**********************************************************************************************************
+
+SET SAFETY OFF
+
+@dynamic_tables@
+
+
+^BATCH    B1_Formatear_Reporte               
+[PARENT_FOLDER_ID] 1412276353
+Comment
+*********************************************************************************************************
+**                                                                                                   
+**  Nombre del Script : B1_Formatear_Reporte                                               
+**                                                                                                   
+**                                                                                                   
+**   Objetivo: Formatear el reporte final.
+**
+**   Tabla Necesarias: N/A
+**
+**
+**   Output :  N/A
+**
+**
+**   Escrito Por: @name@, BRRD, Fecha:@date@
+**
+**
+**   Modificado Por: 
+**
+**********************************************************************************************************
+
+Comment
+Ruta del reporte generado
+
+Comment :: Ruta del archivo de excepciones sin formatear -----------
+xls_file="%v_Ruta_Resultados%\%v_output%.xlsx"
+
+Comment :: Ruta del archivo de excepciones formateado --------------
+xls_output_file = "%v_Ruta_Excepciones%\%v_output%.xlsx"
+
+Comment - Autor del reporte.
+rname="@name@"
+
+Comment - Fecha desde.
+rfrom="@fecha_desde@"
+
+Comment - Fecha hasta.
+rto=date()
+
+Comment - Autorizado por.
+rauthorized="Helen Gutierrez"
+
+Comment - Ejecutar la aplicación para dar formato al reporte generado.
+execute 'PlantillaReporte "%xls_file%" "%rname%" "%rtitle%" "%rdesc%" "%rfrom%" "%rto%" "%rtemplate%"  "%rauthorized%" "%xls_output_file%"'
+^BATCH    B2_Enviar_Correo                   
+[PARENT_FOLDER_ID] 1412276353
+Comment
+*********************************************************************************************************
+**                                                                                                   
+**  Nombre del Script : B2_Enviar_Correo                                               
+**                                                                                                   
+**                                                                                                   
+**   Objetivo: Envio de correo.
+**
+**   Tabla Necesarias: N/A
+**
+**
+**   Output :  N/A
+**
+**
+**   Escrito Por: @name@, BRRD, Fecha:@date@
+**
+**
+**   Modificado Por: 
+**
+**********************************************************************************************************
+
+Comment :: Asunto
+subject = "Excepciones encontradas"
+
+Comment :: Destinatario(s) del correo ejemplo (Si existen varios destinatarios deberán separarse por ';' ejemplo: user1@banreservas.com;user2@banreservas.com)
+mail_to = ""
+
+Comment :: Persona(s) que sera copiada en el correo (Si existen varias personas copiadas deberán separarse por ';' ejemplo: user1@banreservas.com;user2@banreservas.com)
+mail_copy_to = ""
+
+Comment :: Copia oculta (Si existen varias personas con copia oculta deberán separarse por ';' ejemplo: user1@banreservas.com;user2@banreservas.com)
+mail_bcc = ""
+
+Comment :: Cuerpo del mensaje
+mail_body = ""
+
+Comment :: Archivos adjuntos en el correo(Si existe varios archivos, estos deberan estar separados por ';' ejemplo: ruta1/archivo1;ruta2/archivo2)
+result_files = ""
+
+execute 'MailSender "%subject%" "%mail_to%" "%mail_copy_to%" "%mail_bcc%" "%mail_body%" "%result_files%"'
+
+^BATCH    B3_Estadistica                     
+[PARENT_FOLDER_ID] 1412276353
+Comment
+*********************************************************************************************************
+**                                                                                                   
+**  Nombre del Script : B3_Estadistica                                               
+**                                                                                                   
+**                                                                                                   
+**   Objetivo: Guardar estadistica del proyecto.
+**
+**   Tabla Necesarias: N/A
+**
+**
+**   Output :  N/A
+**
+**
+**   Escrito Por: @name@, BRRD, Fecha:@date@
+**
+**
+**   Modificado Por: 
+**
+**********************************************************************************************************
+
+Comment :: Ruta del archivo de informe
+informe = "@informe@"
+
+Comment :: Ruta de la carpeta de resultados
+carpeta_resultados = "@project_path@\Resultados"
+
+execute 'Estadistica "%informe%" "%carpeta_resultados%"'
+
+^BATCH    B4_Salida_Resultados                     
+[PARENT_FOLDER_ID] 1412276353
+Comment
+*********************************************************************************************************
+**                                                                                                   
+**  Nombre del Script : C1_Procedimientos                                               
+**                                                                                                   
+**                                                                                                   
+**   Objetivo: Monitorear la cuenta de gastos diariamente en los registros de Smart Stream. 
+**
+**   Tabla Necesarias: N/A
+**
+**
+**   Output :  N/A
+**
+**
+**   Escrito Por: Direccin de Auditora Continua, BRRD, Fecha:19/10/2016
+**
+**
+**   Modificado Por: 
+**
+**********************************************************************************************************
+
+Comment :: Ruta del archivo de excepciones sin formatear -----------
+v_folder = "RESULTADOS"
+Comment :: ---------------------------------------------------------
+DO "D:\APP\APLICACIONES-PROGRAMACION\ACL\modules\set_result_folder.dmam"
+v_Ruta_Resultados = v_result_folder
+DELETE SCRIPT SET_RESULT_FOLDER OK
+
+Comment :: Ruta del archivo de excepciones formateado --------------
+v_folder = "..\F-Excepciones"
+Comment :: ---------------------------------------------------------
+DO "D:\APP\APLICACIONES-PROGRAMACION\ACL\modules\set_result_folder.dmam"
+v_Ruta_Excepciones= v_result_folder
+DELETE SCRIPT SET_RESULT_FOLDER OK
+
+v_fecha=date()
+v_fecha_file=ALLTRIM(EXCLUDE(v_fecha;"/"))
+
+
+Comment :: Reporte 1
+Comment :: --------------------------------------------------------------------------------
+
+OPEN @TABLA_RESULTANTE@
+v_output="@NOMBRE_ARCHIVO_DE_SALIDA@%v_fecha_file%"
+
+EXPORT FIELDS @CAMPOS_A_EXPORTAR@ XLSX TO "%v_Ruta_Resultados%\%v_output%"
+
+Comment - Titulo del reporte.
+rtitle="@nombre_prueba@"
+
+Comment - Descripcion del reporte.
+rdesc="@descripcion_prueba@"
+
+Comment - Plantilla definida (no modificar si no existe otra).
+rtemplate="Verde"
+
+DO SCRIPT B1_Formatear_Reporte
+Comment :: --------------------------------------------------------------------------------
+
+
+[PARENT_FOLDER_ID] 0
+^FOLDER   C_PROCEDIMIENTOS                    1418845869
+[PARENT_FOLDER_ID] 1412276302
+^BATCH    C1_Procedimientos                  
+[PARENT_FOLDER_ID] 1418845869
+Comment
+*********************************************************************************************************
+**                                                                                                   
+**  Nombre del Script : C1_Procedimientos                                               
+**                                                                                                   
+**                                                                                                   
+**   Objetivo: @descripcion_prueba@
+**
+**   Tabla Necesarias: N/A
+**
+**
+**   Output :  N/A
+**
+**
+**   Escrito Por: @name@, BRRD, Fecha:@date@
+**
+**
+**   Modificado Por: 
+**
+**********************************************************************************************************
+
+CLOSE
+SET SAFETY OFF
+SET FOLDER TO /TABLAS/INTERMEDIAS
+
+DELETE ALL OK
+
+v_fecha=date()
+v_fecha_file=ALLTRIM(EXCLUDE(v_fecha;"/"))
+
+
+[PARENT_FOLDER_ID] 0
+^FOLDER   C_PROCEDIMIENTOS                    1418845869
+[PARENT_FOLDER_ID] 1412276302
+^BATCH    C2_Borrar_Tablas_Intermedias                  
+[PARENT_FOLDER_ID] 1418845869
+Comment
+*********************************************************************************************************
+**                                                                                                   
+**  Nombre del Script : C2_Borrar_Tablas_Intermedias                                               
+**                                                                                                   
+**                                                                                                   
+**   Objetivo: Eliminar tablas intermedias del proyecto
+**
+**   Tabla Necesarias: N/A
+**
+**
+**   Output :  N/A
+**
+**
+**   Escrito Por: @name@, BRRD, Fecha:@date@
+**
+**
+**   Modificado Por: 
+**
+**********************************************************************************************************
+
+CLOSE
+SET SAFETY OFF
+
+@modules@
+^OPEN 
